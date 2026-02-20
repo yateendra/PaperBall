@@ -1,7 +1,7 @@
 package com.example.paperball.ui.components
 
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -20,8 +20,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.res.painterResource
-import com.example.paperball.R
 import kotlinx.coroutines.delay
 import kotlin.math.cos
 import kotlin.math.sin
@@ -29,7 +27,7 @@ import kotlin.math.sin
 @Composable
 fun SplashScreen(onDismiss: () -> Unit) {
     var showContent by remember { mutableStateOf(false) }
-    
+
     // Animated ball position
     val infiniteTransition = rememberInfiniteTransition(label = "ball")
     val ballY by infiniteTransition.animateFloat(
@@ -41,7 +39,7 @@ fun SplashScreen(onDismiss: () -> Unit) {
         ),
         label = "ballY"
     )
-    
+
     val ballRotation by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 360f,
@@ -51,14 +49,14 @@ fun SplashScreen(onDismiss: () -> Unit) {
         ),
         label = "rotation"
     )
-    
+
     // Fade in animation
     val alpha by animateFloatAsState(
         targetValue = if (showContent) 1f else 0f,
         animationSpec = tween(800),
         label = "alpha"
     )
-    
+
     // Scale animation for icon
     val iconScale by animateFloatAsState(
         targetValue = if (showContent) 1f else 0.5f,
@@ -68,12 +66,12 @@ fun SplashScreen(onDismiss: () -> Unit) {
         ),
         label = "iconScale"
     )
-    
+
     LaunchedEffect(Unit) {
         delay(200)
         showContent = true
     }
-    
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -96,13 +94,7 @@ fun SplashScreen(onDismiss: () -> Unit) {
             modifier = Modifier.padding(32.dp)
         ) {
             // App Icon - Large Premium Golf Ball
-<<<<<<< HEAD
-            Image(
-                painter = painterResource(id = R.drawable.ball),
-                contentDescription = "App Icon",
-=======
             Canvas(
->>>>>>> origin/main
                 modifier = Modifier
                     .size(180.dp)
                     .graphicsLayer {
@@ -110,14 +102,11 @@ fun SplashScreen(onDismiss: () -> Unit) {
                         scaleY = iconScale
                         rotationZ = ballRotation * 0.5f
                     }
-<<<<<<< HEAD
-            )
-=======
             ) {
                 val centerX = size.width / 2f
                 val centerY = size.height / 2f
                 val radius = size.minDimension / 2.2f
-                
+
                 // Poly-White Volume
                 drawCircle(
                     brush = androidx.compose.ui.graphics.Brush.radialGradient(
@@ -128,7 +117,7 @@ fun SplashScreen(onDismiss: () -> Unit) {
                     radius = radius,
                     center = Offset(centerX, centerY)
                 )
-                
+
                 // Dimple pattern
                 val random = kotlin.random.Random(42)
                 repeat(45) { i ->
@@ -137,7 +126,7 @@ fun SplashScreen(onDismiss: () -> Unit) {
                     val dist = radius * (0.2f + (i % 3) * 0.25f)
                     val dimpleX = centerX + cos(rad).toFloat() * dist
                     val dimpleY = centerY + sin(rad).toFloat() * dist
-                    
+
                     drawCircle(
                         color = Color.Black.copy(alpha = 0.1f),
                         radius = radius * 0.1f,
@@ -145,10 +134,9 @@ fun SplashScreen(onDismiss: () -> Unit) {
                     )
                 }
             }
->>>>>>> origin/main
-            
+
             Spacer(modifier = Modifier.height(48.dp))
-            
+
             Text(
                 "PREMIUM",
                 fontSize = 20.sp,
@@ -157,7 +145,7 @@ fun SplashScreen(onDismiss: () -> Unit) {
                 letterSpacing = 8.sp,
                 textAlign = TextAlign.Center
             )
-            
+
             Text(
                 "PAPER BALL",
                 fontSize = 48.sp,
@@ -165,9 +153,9 @@ fun SplashScreen(onDismiss: () -> Unit) {
                 color = Color.White.copy(alpha = alpha),
                 textAlign = TextAlign.Center
             )
-            
+
             Spacer(modifier = Modifier.height(12.dp))
-            
+
             Text(
                 "EXECUTIVE EDITION",
                 fontSize = 18.sp,
@@ -176,9 +164,9 @@ fun SplashScreen(onDismiss: () -> Unit) {
                 letterSpacing = 2.sp,
                 textAlign = TextAlign.Center
             )
-            
+
             Spacer(modifier = Modifier.height(64.dp))
-            
+
             val pulseAlpha by infiniteTransition.animateFloat(
                 initialValue = 0.5f,
                 targetValue = 1f,
@@ -188,7 +176,7 @@ fun SplashScreen(onDismiss: () -> Unit) {
                 ),
                 label = "pulse"
             )
-            
+
             Text(
                 "TAP TO START",
                 fontSize = 20.sp,
@@ -197,13 +185,9 @@ fun SplashScreen(onDismiss: () -> Unit) {
                 letterSpacing = 4.sp
             )
         }
-        
+
         Text(
-<<<<<<< HEAD
-            "© 2026 Paper Ball Game",
-=======
             "© 2026 Paper Ball Pro",
->>>>>>> origin/main
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(32.dp),

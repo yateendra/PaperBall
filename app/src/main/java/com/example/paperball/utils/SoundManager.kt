@@ -7,14 +7,9 @@ import java.util.concurrent.Executors
 import kotlin.math.*
 
 class SoundManager {
-<<<<<<< HEAD
     private val executor = Executors.newCachedThreadPool()
     private val sampleRate = 44100
     private val soundCache = mutableMapOf<SoundType, ShortArray>()
-=======
-    private val executor = Executors.newSingleThreadExecutor()
-    private val sampleRate = 44100
->>>>>>> origin/main
     
     enum class SoundType {
         SWISH,   // Scoring
@@ -23,7 +18,6 @@ class SoundManager {
         FLICK    // Ball release (Ping Pong Paddle Hit)
     }
 
-<<<<<<< HEAD
     init {
         // Pre-generate all sounds to avoid runtime calculation overhead
         soundCache[SoundType.SWISH] = generatePingPongCup()
@@ -35,16 +29,6 @@ class SoundManager {
     fun playSound(type: SoundType) {
         val audioData = soundCache[type] ?: return
         executor.execute {
-=======
-    fun playSound(type: SoundType) {
-        executor.execute {
-            val audioData = when (type) {
-                SoundType.SWISH -> generatePingPongCup()
-                SoundType.BOUNCE -> generatePingPongBounce()
-                SoundType.PERFECT -> generatePerfectChime()
-                SoundType.FLICK -> generatePingPongPaddle()
-            }
->>>>>>> origin/main
             playRaw(audioData)
         }
     }

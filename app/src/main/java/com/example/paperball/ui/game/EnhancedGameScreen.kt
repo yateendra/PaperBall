@@ -50,11 +50,8 @@ import kotlin.math.*
 import kotlin.random.Random
 import androidx.compose.ui.res.painterResource
 import com.example.paperball.R
-<<<<<<< HEAD
 import androidx.compose.ui.graphics.PathEffect
 import androidx.activity.compose.BackHandler
-=======
->>>>>>> origin/main
 
 // Helper operator for Offset
 operator fun Offset.plus(other: Offset) = Offset(x + other.x, y + other.y)
@@ -79,7 +76,6 @@ fun EnhancedPaperBallGame() {
     
     val screenWidthPx = with(density) { config.screenWidthDp.dp.toPx() }
     val screenHeightPx = with(density) { config.screenHeightDp.dp.toPx() }
-<<<<<<< HEAD
     var isFlipped by remember { mutableStateOf(false) }
     
     var controlSystem by remember { mutableStateOf(prefsManager.controlSystem) }
@@ -93,20 +89,13 @@ fun EnhancedPaperBallGame() {
     
     // Unified Grounding System (Raised to clear UI)
     val floorY = screenHeightPx * 0.82f 
-=======
-    val ballRadiusPx = with(density) { 32.dp.toPx() }
-    
-    // Unified Grounding System (Raised to clear UI)
-    val floorY = screenHeightPx * 0.82f 
-    val cupHeight = 530f
->>>>>>> origin/main
+
     val ballGrounding = with(density) { 24.dp.toPx() } 
     val cupGrounding = with(density) { 12.dp.toPx() }  
     
     val savedCupX = prefsManager.cupPositionX
     val savedCupY = prefsManager.cupPositionY
     
-<<<<<<< HEAD
     val defaultCupX = screenWidthPx - cupWidth - 64f
     val defaultCupY = floorY - cupHeight + cupGrounding
     
@@ -117,14 +106,7 @@ fun EnhancedPaperBallGame() {
     var gameState by remember {
         mutableStateOf(GameState(
             ball = Ball(position = spawnPoint),
-=======
-    val defaultCupX = screenWidthPx * 0.7f
-    val defaultCupY = floorY - cupHeight + cupGrounding
-    
-    var gameState by remember {
-        mutableStateOf(GameState(
-            ball = Ball(position = Offset(screenWidthPx * 0.20f, floorY - ballRadiusPx + ballGrounding)),
->>>>>>> origin/main
+
             bin = Bin(position = Offset(
                 (if (savedCupX > 0) savedCupX else defaultCupX).coerceIn(0f, screenWidthPx - cupWidth),
                 if (savedCupY > 0) savedCupY else defaultCupY
@@ -176,7 +158,6 @@ fun EnhancedPaperBallGame() {
         }
     }
     
-<<<<<<< HEAD
     var showExitDialog by remember { mutableStateOf(false) }
 
     BackHandler {
@@ -209,9 +190,7 @@ fun EnhancedPaperBallGame() {
             textContentColor = Color(0xFFCCCCCC)
         )
     }
-    
-=======
->>>>>>> origin/main
+
     // OPTIMIZED MASTER LOOP (HUD & Particles)
     // Only handles visual effects that outlive the physics cycle.
     LaunchedEffect(Unit) {
@@ -253,7 +232,6 @@ fun EnhancedPaperBallGame() {
             var hasScored = false
             var hasMissed = false
             var stopSimulation = false
-<<<<<<< HEAD
             var lastBounceTime = 0L
             var motionlessFrames = 0
 
@@ -336,75 +314,10 @@ fun EnhancedPaperBallGame() {
                         if (abs(vy) > 200f) {
                             tryPlayBounceSound(abs(vy), "Rim")
                         }
-=======
-
-            while (y < screenHeightPx + 100 && !stopSimulation && !hasMissed) {
-                withFrameMillis {
-                    val currentBinX = gameState.bin.position.x
-                    val currentBinY = gameState.bin.position.y
-
-                    vy += gravity * 0.016f
-                    vx *= drag
-                    x += vx * 0.016f
-                    y += vy * 0.016f
-                    rotation += (vx * 0.5f + vy * 0.3f) * 0.016f
-
-                    // 1. Boundaries
-                    if (y < ballRadiusPx && vy < 0) {
-                        vy = -vy * bounceDamping
-                        y = ballRadiusPx
-                        vibrate(30)
-                        soundManager.playSound(SoundManager.SoundType.BOUNCE)
-                    }
-                    if (x < ballRadiusPx) {
-                        vx = -vx * bounceDamping
-                        x = ballRadiusPx
-                        vibrate(30)
-                        soundManager.playSound(SoundManager.SoundType.BOUNCE)
-                    } else if (x > screenWidthPx - ballRadiusPx) {
-                        vx = -vx * bounceDamping
-                        x = screenWidthPx - ballRadiusPx
-                        vibrate(30)
-                        soundManager.playSound(SoundManager.SoundType.BOUNCE)
-                    }
-
-                    // 2. Floor (Physics)
-                    val physicsFloorY = floorY + ballGrounding
-                    if (y > physicsFloorY - ballRadiusPx && vy > 0) {
-                        if (abs(vy) > 100f) {
-                            vy = -vy * bounceDamping
-                            y = physicsFloorY - ballRadiusPx
-                            vx *= 0.9f
-                            vibrate(40)
-                            soundManager.playSound(SoundManager.SoundType.BOUNCE)
-                        } else {
-                            hasMissed = true
-                        }
-                    }
-
-                    // 3. Cup Collision
-                    val cupWidth = 480f
-                    val cupHeight = 530f
-                    val rimHeight = 40f
-                    val rimLeft = currentBinX + 40f
-                    val rimRight = currentBinX + cupWidth - 40f
-                    val rimTop = currentBinY + rimHeight
-
-                    // Rim bounce
-                    val isAboveOpening = y < rimTop && y + vy * 0.016f > rimTop - 20f
-                    val hitRim = (abs(x - rimLeft) < 25f || abs(x - rimRight) < 25f) && isAboveOpening
-                    if (hitRim && vy > 0) {
-                        vx = if (x < currentBinX + cupWidth/2) -abs(vx + 150f) * 0.7f else abs(vx + 150f) * 0.7f
-                        vy = -vy * 0.5f
-                        y = rimTop - 10f
-                        vibrate(40)
-                        soundManager.playSound(SoundManager.SoundType.BOUNCE)
->>>>>>> origin/main
                     }
 
                     // Side walls
                     val cupBottom = currentBinY + cupHeight
-<<<<<<< HEAD
                     if (y > currentRimTop && y < cupBottom) {
                         if (x + ballRadiusPx > currentBinX && x < currentBinX + 30f && vx > 0) {
                             vx = -abs(vx) * bounceDamping
@@ -413,21 +326,11 @@ fun EnhancedPaperBallGame() {
                         } else if (x - ballRadiusPx < currentBinX + cupWidth && x > currentBinX + cupWidth - 30f && vx < 0) {
                             vx = abs(vx) * bounceDamping
                             x = (currentBinX + cupWidth + ballRadiusPx).coerceIn(ballRadiusPx * 0.5f, screenWidthPx - ballRadiusPx * 0.5f)
-=======
-                    if (y > rimTop && y < cupBottom) {
-                        if (x + ballRadiusPx > currentBinX && x < currentBinX + 30f && vx > 0) {
-                            vx = -abs(vx) * bounceDamping
-                            x = currentBinX - ballRadiusPx
-                            vibrate(30)
-                        } else if (x - ballRadiusPx < currentBinX + cupWidth && x > currentBinX + cupWidth - 30f && vx < 0) {
-                            vx = abs(vx) * bounceDamping
-                            x = currentBinX + cupWidth + ballRadiusPx
->>>>>>> origin/main
                             vibrate(30)
                         }
                     }
 
-<<<<<<< HEAD
+
                     // 1. Boundaries (Applied LAST for stability)
                     if (y < ballRadiusPx && vy < 0) {
                         vy = -vy * bounceDamping
@@ -447,11 +350,7 @@ fun EnhancedPaperBallGame() {
                     // 4. Scoring check
                     val inAperture = x in (currentRimLeft + 15f)..(currentRimRight - 15f)
                     val crossedRimPlane = y > currentRimTop && (y - vy * 0.016f) <= currentRimTop
-=======
-                    // 4. Scoring check
-                    val inAperture = x in (rimLeft + 15f)..(rimRight - 15f)
-                    val crossedRimPlane = y > rimTop && (y - vy * 0.016f) <= rimTop
->>>>>>> origin/main
+
                     if (inAperture && crossedRimPlane && vy > 0) {
                         hasScored = true
                         val isPerfect = abs(x - (currentBinX + cupWidth/2)) < 30f
@@ -461,11 +360,8 @@ fun EnhancedPaperBallGame() {
                             if (!p.isActive && activated < (if (isPerfect) 40 else 25)) {
                                 activated++
                                 p.copy(
-<<<<<<< HEAD
                                     position = Offset(currentBinX + cupWidth/2, currentRimTop),
-=======
-                                    position = Offset(currentBinX + cupWidth/2, rimTop),
->>>>>>> origin/main
+
                                     velocity = Offset(Random.nextFloat() * 14f - 7f, Random.nextFloat() * -20f - 8f),
                                     color = if (Random.nextFloat() > 0.3f) Color(0xFFFFD700) else Color(0xFFFFFACD),
                                     isActive = true,
@@ -496,12 +392,8 @@ fun EnhancedPaperBallGame() {
                     if (!stopSimulation) {
                         gameState = gameState.copy(
                             ball = gameState.ball.copy(position = Offset(x, y), rotation = rotation),
-<<<<<<< HEAD
                             trailPoints = (gameState.trailPoints + TrailPoint(Offset(x, y), 0.4f)).takeLast(10)
-=======
-                            trailPoints = (gameState.trailPoints + TrailPoint(Offset(x, y), 1f)).takeLast(10)
-                                .mapIndexed { i, p -> p.copy(alpha = (i + 1) / 10f * 0.4f) }
->>>>>>> origin/main
+
                         )
                     }
                 }
@@ -533,8 +425,6 @@ fun EnhancedPaperBallGame() {
             }
 
             delay(800)
-<<<<<<< HEAD
-            
             // Randomize & Flip positions on SCORE
             if (hasScored) {
                 isFlipped = !isFlipped
@@ -575,11 +465,7 @@ fun EnhancedPaperBallGame() {
             prefsManager.totalShots += 1
             gameState = gameState.copy(
                 ball = Ball(position = spawnPoint),
-=======
-            prefsManager.totalShots += 1
-            gameState = gameState.copy(
-                ball = Ball(position = Offset(screenWidthPx * 0.20f, floorY - ballRadiusPx + ballGrounding)),
->>>>>>> origin/main
+
                 isAnimating = false,
                 attempts = gameState.attempts + 1,
                 trailPoints = emptyList()
@@ -598,7 +484,6 @@ fun EnhancedPaperBallGame() {
                     // Use the unified floorY for background
                     val horizonY = floorY
                     
-<<<<<<< HEAD
                     // 1. Abstract Luxury Black Gradient with Vignette
                     drawRect(
                         brush = androidx.compose.ui.graphics.Brush.radialGradient(
@@ -611,14 +496,6 @@ fun EnhancedPaperBallGame() {
                             center = Offset(size.width / 2f, size.height * 0.35f),
                             radius = size.height * 0.8f,
                             tileMode = androidx.compose.ui.graphics.TileMode.Clamp
-=======
-                    // 1. Premium Dark Spotlight Background
-                    drawRect(
-                        brush = androidx.compose.ui.graphics.Brush.radialGradient(
-                            colors = listOf(Color(0xFF2C2C2C), Color(0xFF000000)),
-                            center = Offset(size.width / 2f, size.height * 0.4f),
-                            radius = size.width * 1.5f
->>>>>>> origin/main
                         )
                     )
                     
@@ -650,25 +527,21 @@ fun EnhancedPaperBallGame() {
         val horizonY = floorY
         val binX = gameState.bin.position.x
         val binY = gameState.bin.position.y
-<<<<<<< HEAD
-        // using dynamic cupWidth/cupHeight from above
-=======
-        val cupWidth = 480f
-        val cupHeight = 530f
->>>>>>> origin/main
+        val currentCupWidth = 480f * cupSizeMult
+        val currentCupHeight = 530f * cupSizeMult
         
         // 1. CUP RENDERING LAYER
         Canvas(modifier = Modifier.fillMaxSize()) {
-            val cupBottom = binY + cupHeight
+            val cupBottom = binY + currentCupHeight
             
             // Cup Reflection (Flipped and faded)
             val reflectionAlpha = 0.15f
             withTransform({
                 scale(scaleX = 1f, scaleY = -1f, pivot = Offset(binX, horizonY))
             }) {
-                translate(binX, binY + (horizonY - binY) * 2f - cupHeight) {
+                translate(binX, binY + (horizonY - binY) * 2f - currentCupHeight) {
                     with(cupPainter) {
-                        draw(size = Size(cupWidth, cupHeight), alpha = reflectionAlpha)
+                        draw(size = Size(currentCupWidth, currentCupHeight), alpha = reflectionAlpha)
                     }
                 }
             }
@@ -677,17 +550,17 @@ fun EnhancedPaperBallGame() {
             drawOval(
                 brush = androidx.compose.ui.graphics.Brush.radialGradient(
                     colors = listOf(Color.Black.copy(alpha = 0.45f), Color.Transparent),
-                    center = Offset(binX + cupWidth / 2f, cupBottom - cupGrounding),
-                    radius = cupWidth * 0.45f
+                    center = Offset(binX + currentCupWidth / 2f, cupBottom - cupGrounding),
+                    radius = currentCupWidth * 0.45f
                 ),
-                topLeft = Offset(binX + 40f, cupBottom - cupGrounding - 10f),
-                size = Size(cupWidth - 80f, 20f)
+                topLeft = Offset(binX + 40f * cupSizeMult, cupBottom - cupGrounding - 10f),
+                size = Size(currentCupWidth - 80f * cupSizeMult, 20f)
             )
             
             // Main Cup Image
             translate(binX, binY) {
                 with(cupPainter) {
-                    draw(size = Size(cupWidth, cupHeight))
+                    draw(size = Size(currentCupWidth, currentCupHeight))
                 }
             }
 
@@ -695,24 +568,17 @@ fun EnhancedPaperBallGame() {
             drawOval(
                 brush = androidx.compose.ui.graphics.Brush.radialGradient(
                     colors = listOf(Color.Black.copy(alpha = 0.4f), Color.Transparent),
-                    radius = cupWidth / 2.2f
+                    radius = currentCupWidth / 2.2f
                 ),
-                topLeft = Offset(binX + 50f, binY + 45f),
-                size = Size(cupWidth - 100f, 25f)
+                topLeft = Offset(binX + 50f * cupSizeMult, binY + 45f * cupSizeMult),
+                size = Size(currentCupWidth - 100f * cupSizeMult, 25f * cupSizeMult)
             )
         }
 
+        // 2. TRAJECTORY DOTS LAYER
         if (gameState.isDragging && !gameState.isAnimating) {
             Canvas(modifier = Modifier.fillMaxSize()) {
-<<<<<<< HEAD
                 val pullVector = spawnPoint - gameState.ball.position
-=======
-                val power = 8f
-                val throwVelocity = Offset(
-                    (gameState.ball.position.x - gameState.dragStart.x) * power,
-                    (gameState.ball.position.y - gameState.dragStart.y) * power
-                )
->>>>>>> origin/main
                 
                 if (controlSystem == "pull") {
                     // Slingshot Pull Logic - Dots start at ball
@@ -772,9 +638,6 @@ fun EnhancedPaperBallGame() {
             }
         }
 
-<<<<<<< HEAD
-        // Note: Ball and Trails moved below HUD for better Z-order
-        
         // 3. TOUCH HANDLER (GESTURE LAYER) - Must be below HUD for button clicks to work
         Box(
             modifier = Modifier
@@ -792,12 +655,12 @@ fun EnhancedPaperBallGame() {
                             }
 
                             val currentCupWidth = 480f * cupSizeMult
-                            val cupHeight = 530f
+                            val currentCupHeight = 530f * cupSizeMult
                             val binX = gameState.bin.position.x
                             val binY = gameState.bin.position.y
                             
                             val touchingCup = offset.x in (binX)..(binX + currentCupWidth) &&
-                                    offset.y in (binY)..(binY + cupHeight)
+                                    offset.y in (binY)..(binY + currentCupHeight)
                             
                             val touchingBall = gameState.ball.position.minus(offset).getDistance() < 250f
                             
@@ -816,12 +679,12 @@ fun EnhancedPaperBallGame() {
                         },
                         onDrag = { _, dragAmount ->
                             if (isDraggingCup) {
-                                 val cupWidth = 480f
-                                 val cupHeight = 530f
+                                 val currentCupWidth = 480f * cupSizeMult
+                                 val currentCupHeight = 530f * cupSizeMult
                                 val newX = (gameState.bin.position.x + dragAmount.x)
-                                    .coerceIn(0f, screenWidthPx - cupWidth)
+                                    .coerceIn(0f, screenWidthPx - currentCupWidth)
                                 val newY = (gameState.bin.position.y + dragAmount.y)
-                                    .coerceIn(50f, screenHeightPx * 0.85f - cupHeight)
+                                    .coerceIn(50f, screenHeightPx * 0.85f - currentCupHeight)
                                 gameState = gameState.copy(
                                     bin = gameState.bin.copy(position = Offset(newX, newY))
                                 )
@@ -888,106 +751,10 @@ fun EnhancedPaperBallGame() {
                             }
                         }
                     )
-=======
-        // Unified Game Layer (Trails & Particles)
-        Canvas(modifier = Modifier.fillMaxSize()) {
-            val radiusPx = ballRadiusPx
-            
-            // 1. Draw Trail
-            gameState.trailPoints.forEachIndexed { index, point ->
-                val alphaBase = (index.toFloat() / gameState.trailPoints.size.coerceAtLeast(1))
-                drawCircle(
-                    color = Color.White.copy(alpha = alphaBase * 0.2f),
-                    radius = radiusPx * alphaBase,
-                    center = point.position
-                )
-            }
-
-            // 2. Draw Active Particles
-            gameState.particles.forEach { particle ->
-                if (particle.isActive) {
-                    drawCircle(
-                        color = particle.color.copy(alpha = particle.alpha),
-                        radius = particle.size,
-                        center = particle.position
-                    )
-                }
-            }
-        }
-        // 2. BALL RENDERING LAYER
-        Canvas(modifier = Modifier.fillMaxSize()) {
-            val ball = gameState.ball
-            val radiusPx = ballRadiusPx
-            
-            // A. Floor Reflection
-            val distToFloor = (floorY - ball.position.y).coerceAtLeast(-ballGrounding)
-            val reflectionAlpha = (0.15f * (1f - distToFloor / (size.height * 0.4f))).coerceIn(0f, 0.15f)
-            
-            if (reflectionAlpha > 0.01f) {
-                val reflectionY = floorY + distToFloor + ballGrounding * 2f
-                rotate(ball.rotation, pivot = Offset(ball.position.x, reflectionY)) {
-                    translate(ball.position.x - radiusPx, reflectionY - radiusPx) {
-                        with(ballPainter) {
-                            draw(size = Size(radiusPx * 2f, radiusPx * 2f), alpha = reflectionAlpha)
-                        }
-                    }
-                }
-            }
-
-            // B. Dynamic Ground Shadow (Anchor to Contact Point)
-            val shadowY = floorY + ballGrounding
-            val shadowScale = (1f + distToFloor / 250f).coerceIn(1f, 3f)
-            val shadowAlpha = (0.6f / shadowScale).coerceIn(0.1f, 0.6f)
-            
-            drawOval(
-                brush = androidx.compose.ui.graphics.Brush.radialGradient(
-                    colors = listOf(Color.Black.copy(alpha = shadowAlpha), Color.Transparent),
-                    center = Offset(ball.position.x, shadowY),
-                    radius = radiusPx * 1.4f * shadowScale
-                ),
-                topLeft = Offset(ball.position.x - radiusPx * shadowScale, shadowY - radiusPx * 0.15f),
-                size = Size(radiusPx * 2f * shadowScale, radiusPx * 0.3f)
-            )
-
-            // C. The Ball
-            val isInsideCup = ball.position.y > binY && ball.position.x in binX..(binX + 480f)
-            
-            rotate(ball.rotation, pivot = ball.position) {
-                translate(ball.position.x - radiusPx, ball.position.y - radiusPx) {
-                    with(ballPainter) {
-                        draw(size = Size(radiusPx * 2f, radiusPx * 2f))
-                    }
->>>>>>> origin/main
                 }
         )
 
-<<<<<<< HEAD
-=======
-                // Fresnel / Lighting Integrations
-                drawCircle(
-                    color = Color.White.copy(alpha = 0.2f),
-                    radius = radiusPx,
-                    center = ball.position,
-                    style = Stroke(width = 1f)
-                )
-
-                if (isInsideCup) {
-                    drawCircle(
-                        brush = androidx.compose.ui.graphics.Brush.radialGradient(
-                            colors = listOf(Color(0xFFFFD700).copy(alpha = 0.2f), Color.Transparent),
-                            center = ball.position,
-                            radius = radiusPx * 1.5f
-                        ),
-                        radius = radiusPx * 1.5f,
-                        center = ball.position
-                    )
-                }
-            }
-        }
->>>>>>> origin/main
-
-
-        // Premium Floating Scoreboard (Pill-shaped with Glassmorphism)
+        // 4. Premium Floating Scoreboard (Pill-shaped with Glassmorphism)
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -1021,7 +788,6 @@ fun EnhancedPaperBallGame() {
                             )
                         ),
                         shape = androidx.compose.foundation.shape.RoundedCornerShape(40.dp)
-<<<<<<< HEAD
                     )
             ) {
                 Row(
@@ -1120,7 +886,7 @@ fun EnhancedPaperBallGame() {
             }
         }
 
-        // 2. BALL & GAME LAYER (Trails, Particles, Ball) - Rendered over HUD
+        // 5. BALL & GAME LAYER (Trails, Particles, Ball) - Rendered over HUD
         Canvas(modifier = Modifier.fillMaxSize()) {
             val radiusPx = ballRadiusPx
             
@@ -1141,93 +907,12 @@ fun EnhancedPaperBallGame() {
                         color = particle.color.copy(alpha = particle.alpha),
                         radius = particle.size,
                         center = particle.position
-=======
->>>>>>> origin/main
                     )
-            ) {
-                Row(
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    // Score Card
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(
-                            "CURRENT",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = Color(0xFFFFD700).copy(alpha = 0.8f),
-                            fontWeight = FontWeight.Bold,
-                            letterSpacing = 1.2.sp
-                        )
-                        Text(
-                            "${gameState.score}",
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Black,
-                            color = Color(0xFFFFFACD) // Light Golden Yellow
-                        )
-                    }
-
-                    // Gold Vertical Divider
-                    Box(modifier = Modifier.width(1.dp).height(32.dp).alpha(0.4f).background(goldBrush))
-
-                    // Best Card
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(
-                            "BEST",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = Color(0xFFFFD700).copy(alpha = 0.8f),
-                            fontWeight = FontWeight.Bold,
-                            letterSpacing = 1.2.sp
-                        )
-                        Text(
-                            "${gameState.highScore}",
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Bold,
-                            color = Color(0xFFFFD700)
-                        )
-                    }
-
-                    // Gold Vertical Divider
-                    Box(modifier = Modifier.width(1.dp).height(32.dp).alpha(0.4f).background(goldBrush))
-
-                    // Streak Card
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(
-                            "STREAK",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = Color(0xFFFFD700).copy(alpha = 0.8f),
-                            fontWeight = FontWeight.Bold,
-                            letterSpacing = 1.2.sp
-                        )
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(
-                                "${gameState.currentStreak}",
-                                style = MaterialTheme.typography.titleLarge,
-                                fontWeight = FontWeight.Black,
-                                color = if (gameState.currentStreak > 1) Color(0xFFFFD700) else Color(0xFFFFFACD)
-                            )
-                            if (gameState.currentStreak > 1) {
-                                Icon(
-                                    imageVector = Icons.Default.Star,
-                                    contentDescription = "Streak",
-                                    tint = Color(0xFFFFD700),
-                                    modifier = Modifier.size(16.dp).padding(start = 4.dp)
-                                )
-                            }
-                        }
-                    }
                 }
             }
-        }
-
-<<<<<<< HEAD
-        Canvas(modifier = Modifier.fillMaxSize()) {
-            val ball = gameState.ball
-            val radiusPx = ballRadiusPx
             
             // C. Ball Drawing
+            val ball = gameState.ball
             val drawPos = if (gameState.isDragging && controlSystem == "normal") spawnPoint else ball.position
             
             // Floor Reflection
@@ -1276,7 +961,7 @@ fun EnhancedPaperBallGame() {
                     style = Stroke(width = 1f)
                 )
 
-                val isInsideCup = ball.position.y > binY && ball.position.x in binX..(binX + 480f)
+                val isInsideCup = ball.position.y > binY && ball.position.x in binX..(binX + currentCupWidth)
                 if (isInsideCup) {
                     drawCircle(
                         brush = androidx.compose.ui.graphics.Brush.radialGradient(
@@ -1291,8 +976,7 @@ fun EnhancedPaperBallGame() {
             }
         }
 
-=======
->>>>>>> origin/main
+        // 6. OVERLAYS
         // Message overlay
         gameState.showMessage?.let { msg ->
             Box(
@@ -1310,115 +994,6 @@ fun EnhancedPaperBallGame() {
                 )
             }
         }
-
-<<<<<<< HEAD
-        // Ball rendering moved earlier in code for correct sequencing
-
-
-        // Executive Border & Vignette
-        Canvas(modifier = Modifier.fillMaxSize()) {
-            // Vignette
-            drawRect(
-                brush = androidx.compose.ui.graphics.Brush.radialGradient(
-                    colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.45f)),
-                    center = center,
-                    radius = size.maxDimension * 0.8f
-                )
-            )
-            
-            // Subtle Gold Border
-            drawRect(
-                color = Color(0xFFFFD700).copy(alpha = 0.12f),
-                style = Stroke(width = 4f)
-            )
-        }
-=======
-        // Touch handler for ball and cup
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .pointerInput(Unit) {
-                    detectDragGestures(
-                        onDragStart = { offset ->
-                            val cupWidth = 480f
-                            val cupHeight = 530f
-                            val binX = gameState.bin.position.x
-                            val binY = gameState.bin.position.y
-                            
-                            // Check if touching cup
-                            val touchingCup = offset.x in (binX)..(binX + cupWidth) &&
-                                    offset.y in (binY)..(binY + cupHeight)
-                            
-                            // Check if touching ball
-                            val touchingBall = gameState.ball.position.minus(offset).getDistance() < 100f
-                            
-                            if (!gameState.isAnimating && !gameState.isPaused) {
-                                if (touchingCup) {
-                                    isDraggingCup = true
-                                    vibrate(20)
-                                } else if (touchingBall) {
-                                    gameState = gameState.copy(
-                                        isDragging = true,
-                                        dragStart = offset
-                                    )
-                                    vibrate(20)
-                                }
-                            }
-                        },
-                        onDrag = { _, dragAmount ->
-                            if (isDraggingCup) {
-                                // Drag cup
-                                 val cupWidth = 480f
-                                 val cupHeight = 530f
-                                val newX = (gameState.bin.position.x + dragAmount.x)
-                                    .coerceIn(0f, screenWidthPx - cupWidth)
-                                val newY = (gameState.bin.position.y + dragAmount.y)
-                                    .coerceIn(50f, screenHeightPx * 0.85f - cupHeight)
-                                gameState = gameState.copy(
-                                    bin = gameState.bin.copy(position = Offset(newX, newY))
-                                )
-                            } else if (!gameState.isAnimating && gameState.isDragging) {
-                                // Drag ball
-                                val newX = (gameState.ball.position.x + dragAmount.x)
-                                    .coerceIn(50f, screenWidthPx - 50f)
-                                val newY = (gameState.ball.position.y + dragAmount.y)
-                                    .coerceIn(100f, screenHeightPx * 0.9f)
-                                gameState = gameState.copy(
-                                    ball = gameState.ball.copy(position = Offset(newX, newY))
-                                )
-                            }
-                        },
-                        onDragEnd = {
-                            if (isDraggingCup) {
-                                // Save cup position
-                                prefsManager.cupPositionX = gameState.bin.position.x
-                                prefsManager.cupPositionY = gameState.bin.position.y
-                                isDraggingCup = false
-                                vibrate(30)
-                            } else if (!gameState.isAnimating && gameState.isDragging) {
-                                // Throw ball
-                                val power = 8f
-                                val throwVelocity = Offset(
-                                    (gameState.ball.position.x - gameState.dragStart.x) * power,
-                                    (gameState.ball.position.y - gameState.dragStart.y) * power
-                                )
-
-                                gameState = gameState.copy(
-                                    ball = gameState.ball.copy(
-                                        velocity = throwVelocity,
-                                        inHand = false
-                                    ),
-                                    isAnimating = true,
-                                    isDragging = false
-                                )
-                                vibrate(50)
-                                soundManager.playSound(SoundManager.SoundType.FLICK)
-                            }
-                        }
-                    )
-                }
-        )
->>>>>>> origin/main
 
         // Executive Border & Vignette
         Canvas(modifier = Modifier.fillMaxSize()) {
