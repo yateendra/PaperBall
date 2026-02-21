@@ -82,6 +82,8 @@ fun EnhancedPaperBallGame() {
     var ballSizeMult by remember { mutableStateOf(prefsManager.ballSizeMult) }
     var cupSizeMult by remember { mutableStateOf(prefsManager.cupSizeMult) }
     var isCupDraggable by remember { mutableStateOf(prefsManager.isCupDraggable) }
+    var soundEnabled by remember { mutableStateOf(prefsManager.soundEnabled) }
+    var hapticEnabled by remember { mutableStateOf(prefsManager.hapticEnabled) }
 
     val ballRadiusPx = with(density) { 32.dp.toPx() * ballSizeMult }
     val cupHeight = 530f * cupSizeMult
@@ -144,7 +146,7 @@ fun EnhancedPaperBallGame() {
 
     // Haptic feedback helper
     fun vibrate(duration: Long = 50) {
-        if (prefsManager.hapticEnabled) {
+        if (hapticEnabled) {
             try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     vibrator.vibrate(VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE))
@@ -265,7 +267,7 @@ fun EnhancedPaperBallGame() {
                         val timeDiff = currentTime - lastBounceTime
                         if (timeDiff > 400) { 
                              vibrate(if (impactVelocity > 150f) 40 else 30)
-                             soundManager.playSound(SoundManager.SoundType.BOUNCE)
+                             if (soundEnabled) soundManager.playSound(SoundManager.SoundType.BOUNCE)
                              lastBounceTime = currentTime
                         }
                     }
@@ -377,11 +379,11 @@ fun EnhancedPaperBallGame() {
                             hudGlow = 1f
                         )
                         if (isPerfect) {
-                            soundManager.playSound(SoundManager.SoundType.PERFECT)
+                            if (soundEnabled) soundManager.playSound(SoundManager.SoundType.PERFECT)
                             vibrate(100)
                             Toast.makeText(context, "🎯 PERFECT!", Toast.LENGTH_SHORT).show()
                         } else {
-                            soundManager.playSound(SoundManager.SoundType.SWISH)
+                            if (soundEnabled) soundManager.playSound(SoundManager.SoundType.SWISH)
                             vibrate(70)
                             Toast.makeText(context, "Scored!", Toast.LENGTH_SHORT).show()
                         }
@@ -747,7 +749,7 @@ fun EnhancedPaperBallGame() {
                                     isDragging = false
                                 )
                                 vibrate(60)
-                                soundManager.playSound(SoundManager.SoundType.FLICK)
+                                if (soundEnabled) soundManager.playSound(SoundManager.SoundType.FLICK)
                             }
                         }
                     )
@@ -1060,14 +1062,20 @@ fun EnhancedPaperBallGame() {
         // Settings screen
         if (gameState.showSettings) {
             SettingsScreen(
-                soundEnabled = prefsManager.soundEnabled,
-                hapticEnabled = prefsManager.hapticEnabled,
+                soundEnabled = soundEnabled,
+                hapticEnabled = hapticEnabled,
                 isCupDraggable = isCupDraggable,
                 controlSystem = controlSystem,
                 ballSizeMult = ballSizeMult,
                 cupSizeMult = cupSizeMult,
-                onSoundToggle = { prefsManager.soundEnabled = it },
-                onHapticToggle = { prefsManager.hapticEnabled = it },
+                onSoundToggle = { 
+                    soundEnabled = it
+                    prefsManager.soundEnabled = it 
+                },
+                onHapticToggle = { 
+                    hapticEnabled = it
+                    prefsManager.hapticEnabled = it 
+                },
                 onCupDraggableToggle = {
                     isCupDraggable = it
                     prefsManager.isCupDraggable = it
